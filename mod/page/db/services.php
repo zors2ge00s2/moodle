@@ -36,7 +36,24 @@ $functions = array(
         'capabilities'  => 'mod/page:view',
         'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
     ),
-
+    'mod_page_view_video' => array(
+        'classname'     => 'mod_page_external',
+        'methodname'    => 'view_video',
+        'classpath'     => 'mod/page/classes/external.php',
+        'description'   => 'Log a video view via ajax',
+        'type'          => 'write',
+        'ajax'          => true,
+        'capabilities'  => 'mod/page:view_video',
+        'services'      => array(MOODLE_OFFICIAL_MOBILE_SERVICE)
+    ),
+    'mod_page_submit_video_response' => array(
+        'classname'     => 'mod_page_external',
+        'methodname'    => 'submit_video_response',
+        'classpath'     => 'Log a video response',
+        'type'          => 'write',
+        'ajax'          => true,
+        'capabilities'  => 'mod/page:view_videp'
+    ),
     'mod_page_get_pages_by_courses' => array(
         'classname'     => 'mod_page_external',
         'methodname'    => 'get_pages_by_courses',

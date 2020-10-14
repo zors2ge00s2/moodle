@@ -1,0 +1,13 @@
+DirectoryIndex index.php index.html index.htm
+php_value memory_limit 512M 
+php_flag magic_quotes_gpc 1
+php_flag magic_quotes_runtime 0
+php_flag file_uploads 1
+php_flag session.auto_start 0
+php_flag session.bug_compat_warn 0
+<IfDefine APACHE2>
+    AcceptPathInfo on
+</IfDefine>
+LimitRequestBody 0
+php_value upload_max_filesize 1G
+php_value post_max_size 1G

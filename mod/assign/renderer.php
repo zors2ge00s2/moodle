@@ -634,8 +634,8 @@ class mod_assign_renderer extends plugin_renderer_base {
                             $status->coursemoduleid,
                             $status->returnaction,
                             $status->returnparams);
-                        $plugincomponent = $plugin->get_subtype() . '_' . $plugin->get_type();
-                        $o .= $this->output->container($this->render($pluginsubmission), 'assignsubmission ' . $plugincomponent);
+                            $plugincomponent = $plugin->get_subtype() . '_' . $plugin->get_type();
+                            $o .= $this->output->container($this->render($pluginsubmission), 'assignsubmission ' . $plugincomponent);
                     }
                 }
             }
@@ -654,7 +654,7 @@ class mod_assign_renderer extends plugin_renderer_base {
     public function render_assign_submission_status(assign_submission_status $status) {
         $o = '';
         $o .= $this->output->container_start('submissionstatustable');
-        $o .= $this->output->heading(get_string('submissionstatusheading', 'assign'), 3);
+        $o .= $this->output->heading(get_string('submissionstatusheading', 'assign') . ":", 3);
         $time = time();
 
         if ($status->allowsubmissionsfromdate &&
@@ -669,60 +669,60 @@ class mod_assign_renderer extends plugin_renderer_base {
             }
             $o .= $this->output->box_end();
         }
-        $o .= $this->output->box_start('boxaligncenter submissionsummarytable');
+        //$o .= $this->output->box_start('boxaligncenter submissionsummarytable');
 
-        $t = new html_table();
+        //$t = new html_table();
 
-        $warningmsg = '';
-        if ($status->teamsubmissionenabled) {
-            $cell1content = get_string('submissionteam', 'assign');
-            $group = $status->submissiongroup;
-            if ($group) {
-                $cell2content = format_string($group->name, false, $status->context);
-            } else if ($status->preventsubmissionnotingroup) {
-                if (count($status->usergroups) == 0) {
-                    $notification = new \core\output\notification(get_string('noteam', 'assign'), 'error');
-                    $notification->set_show_closebutton(false);
-                    $warningmsg = $this->output->notification(get_string('noteam_desc', 'assign'), 'error');
-                } else if (count($status->usergroups) > 1) {
-                    $notification = new \core\output\notification(get_string('multipleteams', 'assign'), 'error');
-                    $notification->set_show_closebutton(false);
-                    $warningmsg = $this->output->notification(get_string('multipleteams_desc', 'assign'), 'error');
-                }
-                $cell2content = $this->output->render($notification);
-            } else {
-                $cell2content = get_string('defaultteam', 'assign');
-            }
+        //$warningmsg = '';
+        // if ($status->teamsubmissionenabled) {
+        //     $cell1content = get_string('submissionteam', 'assign');
+        //     $group = $status->submissiongroup;
+        //     if ($group) {
+        //         $cell2content = format_string($group->name, false, $status->context);
+        //     } else if ($status->preventsubmissionnotingroup) {
+        //         if (count($status->usergroups) == 0) {
+        //             $notification = new \core\output\notification(get_string('noteam', 'assign'), 'error');
+        //             $notification->set_show_closebutton(false);
+        //             $warningmsg = $this->output->notification(get_string('noteam_desc', 'assign'), 'error');
+        //         } else if (count($status->usergroups) > 1) {
+        //             $notification = new \core\output\notification(get_string('multipleteams', 'assign'), 'error');
+        //             $notification->set_show_closebutton(false);
+        //             $warningmsg = $this->output->notification(get_string('multipleteams_desc', 'assign'), 'error');
+        //         }
+        //         $cell2content = $this->output->render($notification);
+        //     } else {
+        //         $cell2content = get_string('defaultteam', 'assign');
+        //     }
 
-            $this->add_table_row_tuple($t, $cell1content, $cell2content);
-        }
+        //     $this->add_table_row_tuple($t, $cell1content, $cell2content);
+        // }
 
-        if ($status->attemptreopenmethod != ASSIGN_ATTEMPT_REOPEN_METHOD_NONE) {
-            $currentattempt = 1;
-            if (!$status->teamsubmissionenabled) {
-                if ($status->submission) {
-                    $currentattempt = $status->submission->attemptnumber + 1;
-                }
-            } else {
-                if ($status->teamsubmission) {
-                    $currentattempt = $status->teamsubmission->attemptnumber + 1;
-                }
-            }
+        // if ($status->attemptreopenmethod != ASSIGN_ATTEMPT_REOPEN_METHOD_NONE) {
+        //     $currentattempt = 1;
+        //     if (!$status->teamsubmissionenabled) {
+        //         if ($status->submission) {
+        //             $currentattempt = $status->submission->attemptnumber + 1;
+        //         }
+        //     } else {
+        //         if ($status->teamsubmission) {
+        //             $currentattempt = $status->teamsubmission->attemptnumber + 1;
+        //         }
+        //     }
 
-            $cell1content = get_string('attemptnumber', 'assign');
-            $maxattempts = $status->maxattempts;
-            if ($maxattempts == ASSIGN_UNLIMITED_ATTEMPTS) {
-                $cell2content = get_string('currentattempt', 'assign', $currentattempt);
-            } else {
-                $cell2content = get_string('currentattemptof', 'assign',
-                    array('attemptnumber' => $currentattempt, 'maxattempts' => $maxattempts));
-            }
+        //     $cell1content = get_string('attemptnumber', 'assign');
+        //     $maxattempts = $status->maxattempts;
+        //     if ($maxattempts == ASSIGN_UNLIMITED_ATTEMPTS) {
+        //         $cell2content = get_string('currentattempt', 'assign', $currentattempt);
+        //     } else {
+        //         $cell2content = get_string('currentattemptof', 'assign',
+        //             array('attemptnumber' => $currentattempt, 'maxattempts' => $maxattempts));
+        //     }
 
-            $this->add_table_row_tuple($t, $cell1content, $cell2content);
-        }
+        //     $this->add_table_row_tuple($t, $cell1content, $cell2content);
+        // }
 
-        $cell1content = get_string('submissionstatus', 'assign');
-        $cell2attributes = [];
+        // $cell1content = get_string('submissionstatus', 'assign');
+        //$cell2attributes = [];
         if (!$status->teamsubmissionenabled) {
             if ($status->submission && $status->submission->status != ASSIGN_SUBMISSION_STATUS_NEW) {
                 $cell2content = get_string('submissionstatus_' . $status->submission->status, 'assign');
@@ -734,188 +734,168 @@ class mod_assign_renderer extends plugin_renderer_base {
                     $cell2content = get_string('noattempt', 'assign');
                 }
             }
-        } else {
-            $group = $status->submissiongroup;
-            if (!$group && $status->preventsubmissionnotingroup) {
-                $cell2content = get_string('nosubmission', 'assign');
-            } else if ($status->teamsubmission && $status->teamsubmission->status != ASSIGN_SUBMISSION_STATUS_NEW) {
-                $teamstatus = $status->teamsubmission->status;
-                $cell2content = get_string('submissionstatus_' . $teamstatus, 'assign');
-
-                $members = $status->submissiongroupmemberswhoneedtosubmit;
-                $userslist = array();
-                foreach ($members as $member) {
-                    $urlparams = array('id' => $member->id, 'course'=>$status->courseid);
-                    $url = new moodle_url('/user/view.php', $urlparams);
-                    if ($status->view == assign_submission_status::GRADER_VIEW && $status->blindmarking) {
-                        $userslist[] = $member->alias;
-                    } else {
-                        $fullname = fullname($member, $status->canviewfullnames);
-                        $userslist[] = $this->output->action_link($url, $fullname);
-                    }
-                }
-                if (count($userslist) > 0) {
-                    $userstr = join(', ', $userslist);
-                    $formatteduserstr = get_string('userswhoneedtosubmit', 'assign', $userstr);
-                    $cell2content .= $this->output->container($formatteduserstr);
-                }
-
-                $cell2attributes = array('class' => 'submissionstatus' . $status->teamsubmission->status);
-            } else {
-                if (!$status->submissionsenabled) {
-                    $cell2content = get_string('noonlinesubmissions', 'assign');
-                } else {
-                    $cell2content = get_string('nosubmission', 'assign');
-                }
-            }
         }
+        $o .= $cell2content;
+        $o .= "<br><br>";
 
-        $this->add_table_row_tuple($t, $cell1content, $cell2content, [], $cell2attributes);
+        // } else {
+        //     $group = $status->submissiongroup;
+        //     if (!$group && $status->preventsubmissionnotingroup) {
+        //         $cell2content = get_string('nosubmission', 'assign');
+        //     } else if ($status->teamsubmission && $status->teamsubmission->status != ASSIGN_SUBMISSION_STATUS_NEW) {
+        //         $teamstatus = $status->teamsubmission->status;
+        //         $cell2content = get_string('submissionstatus_' . $teamstatus, 'assign');
 
-        // Is locked?
-        if ($status->locked) {
-            $cell1content = '';
-            $cell2content = get_string('submissionslocked', 'assign');
-            $cell2attributes = array('class' => 'submissionlocked');
-            $this->add_table_row_tuple($t, $cell1content, $cell2content, [], $cell2attributes);
-        }
+        //         $members = $status->submissiongroupmemberswhoneedtosubmit;
+        //         $userslist = array();
+        //         foreach ($members as $member) {
+        //             $urlparams = array('id' => $member->id, 'course'=>$status->courseid);
+        //             $url = new moodle_url('/user/view.php', $urlparams);
+        //             if ($status->view == assign_submission_status::GRADER_VIEW && $status->blindmarking) {
+        //                 $userslist[] = $member->alias;
+        //             } else {
+        //                 $fullname = fullname($member, $status->canviewfullnames);
+        //                 $userslist[] = $this->output->action_link($url, $fullname);
+        //             }
+        //         }
+        //         if (count($userslist) > 0) {
+        //             $userstr = join(', ', $userslist);
+        //             $formatteduserstr = get_string('userswhoneedtosubmit', 'assign', $userstr);
+        //             $cell2content .= $this->output->container($formatteduserstr);
+        //         }
+
+        //         $cell2attributes = array('class' => 'submissionstatus' . $status->teamsubmission->status);
+        //     } else {
+        //         if (!$status->submissionsenabled) {
+        //             $cell2content = get_string('noonlinesubmissions', 'assign');
+        //         } else {
+        //             $cell2content = get_string('nosubmission', 'assign');
+        //         }
+        //     }
+        // }
+
+        // $this->add_table_row_tuple($t, $cell1content, $cell2content, [], $cell2attributes);
+
+        // // Is locked?
+        // if ($status->locked) {
+        //     $cell1content = '';
+        //     $cell2content = get_string('submissionslocked', 'assign');
+        //     $cell2attributes = array('class' => 'submissionlocked');
+        //     $this->add_table_row_tuple($t, $cell1content, $cell2content, [], $cell2attributes);
+        // }
 
         // Grading status.
-        $cell1content = get_string('gradingstatus', 'assign');
-        if ($status->gradingstatus == ASSIGN_GRADING_STATUS_GRADED ||
-            $status->gradingstatus == ASSIGN_GRADING_STATUS_NOT_GRADED) {
-            $cell2content = get_string($status->gradingstatus, 'assign');
-        } else {
-            $gradingstatus = 'markingworkflowstate' . $status->gradingstatus;
-            $cell2content = get_string($gradingstatus, 'assign');
-        }
-        if ($status->gradingstatus == ASSIGN_GRADING_STATUS_GRADED ||
-            $status->gradingstatus == ASSIGN_MARKING_WORKFLOW_STATE_RELEASED) {
-            $cell2attributes = array('class' => 'submissiongraded');
-        } else {
-            $cell2attributes = array('class' => 'submissionnotgraded');
-        }
-        $this->add_table_row_tuple($t, $cell1content, $cell2content, [], $cell2attributes);
+        // $cell1content = get_string('gradingstatus', 'assign');
+        // if ($status->gradingstatus == ASSIGN_GRADING_STATUS_GRADED ||
+        //     $status->gradingstatus == ASSIGN_GRADING_STATUS_NOT_GRADED) {
+        //     $cell2content = get_string($status->gradingstatus, 'assign');
+        // } else {
+        //     $gradingstatus = 'markingworkflowstate' . $status->gradingstatus;
+        //     $cell2content = get_string($gradingstatus, 'assign');
+        // }
+        // if ($status->gradingstatus == ASSIGN_GRADING_STATUS_GRADED ||
+        //     $status->gradingstatus == ASSIGN_MARKING_WORKFLOW_STATE_RELEASED) {
+        //     $cell2attributes = array('class' => 'submissiongraded');
+        // } else {
+        //     $cell2attributes = array('class' => 'submissionnotgraded');
+        // }
+        // $this->add_table_row_tuple($t, $cell1content, $cell2content, [], $cell2attributes);
 
         $submission = $status->teamsubmission ? $status->teamsubmission : $status->submission;
         $duedate = $status->duedate;
-        if ($duedate > 0) {
-            // Due date.
-            $cell1content = get_string('duedate', 'assign');
-            $cell2content = userdate($duedate);
-            $this->add_table_row_tuple($t, $cell1content, $cell2content);
+        // if ($duedate > 0) {
+        //     // Due date.
+        //     $cell1content = get_string('duedate', 'assign');
+        //     $cell2content = userdate($duedate);
+        //     $this->add_table_row_tuple($t, $cell1content, $cell2content);
 
-            if ($status->view == assign_submission_status::GRADER_VIEW) {
-                if ($status->cutoffdate) {
-                    // Cut off date.
-                    $cell1content = get_string('cutoffdate', 'assign');
-                    $cell2content = userdate($status->cutoffdate);
-                    $this->add_table_row_tuple($t, $cell1content, $cell2content);
-                }
-            }
+        //     if ($status->view == assign_submission_status::GRADER_VIEW) {
+        //         if ($status->cutoffdate) {
+        //             // Cut off date.
+        //             $cell1content = get_string('cutoffdate', 'assign');
+        //             $cell2content = userdate($status->cutoffdate);
+        //             $this->add_table_row_tuple($t, $cell1content, $cell2content);
+        //         }
+        //     }
 
-            if ($status->extensionduedate) {
-                // Extension date.
-                $cell1content = get_string('extensionduedate', 'assign');
-                $cell2content = userdate($status->extensionduedate);
-                $this->add_table_row_tuple($t, $cell1content, $cell2content);
-                $duedate = $status->extensionduedate;
-            }
+        //     if ($status->extensionduedate) {
+        //         // Extension date.
+        //         $cell1content = get_string('extensionduedate', 'assign');
+        //         $cell2content = userdate($status->extensionduedate);
+        //         $this->add_table_row_tuple($t, $cell1content, $cell2content);
+        //         $duedate = $status->extensionduedate;
+        //     }
 
-            // Time remaining.
-            $cell1content = get_string('timeremaining', 'assign');
-            $cell2attributes = [];
-            if ($duedate - $time <= 0) {
-                if (!$submission ||
-                        $submission->status != ASSIGN_SUBMISSION_STATUS_SUBMITTED) {
-                    if ($status->submissionsenabled) {
-                        $cell2content = get_string('overdue', 'assign', format_time($time - $duedate));
-                        $cell2attributes = array('class' => 'overdue');
-                    } else {
-                        $cell2content = get_string('duedatereached', 'assign');
-                    }
-                } else {
-                    if ($submission->timemodified > $duedate) {
-                        $cell2content = get_string('submittedlate',
-                                              'assign',
-                                              format_time($submission->timemodified - $duedate));
-                        $cell2attributes = array('class' => 'latesubmission');
-                    } else {
-                        $cell2content = get_string('submittedearly',
-                                               'assign',
-                                               format_time($submission->timemodified - $duedate));
-                        $cell2attributes = array('class' => 'earlysubmission');
-                    }
-                }
-            } else {
-                $cell2content = format_time($duedate - $time);
-            }
-            $this->add_table_row_tuple($t, $cell1content, $cell2content, [], $cell2attributes);
-        }
+        //     // Time remaining.
+        //     $cell1content = get_string('timeremaining', 'assign');
+        //     $cell2attributes = [];
+        //     if ($duedate - $time <= 0) {
+        //         if (!$submission ||
+        //                 $submission->status != ASSIGN_SUBMISSION_STATUS_SUBMITTED) {
+        //             if ($status->submissionsenabled) {
+        //                 $cell2content = get_string('overdue', 'assign', format_time($time - $duedate));
+        //                 $cell2attributes = array('class' => 'overdue');
+        //             } else {
+        //                 $cell2content = get_string('duedatereached', 'assign');
+        //             }
+        //         } else {
+        //             if ($submission->timemodified > $duedate) {
+        //                 $cell2content = get_string('submittedlate',
+        //                                       'assign',
+        //                                       format_time($submission->timemodified - $duedate));
+        //                 $cell2attributes = array('class' => 'latesubmission');
+        //             } else {
+        //                 $cell2content = get_string('submittedearly',
+        //                                        'assign',
+        //                                        format_time($submission->timemodified - $duedate));
+        //                 $cell2attributes = array('class' => 'earlysubmission');
+        //             }
+        //         }
+        //     } else {
+        //         $cell2content = format_time($duedate - $time);
+        //     }
+        //     $this->add_table_row_tuple($t, $cell1content, $cell2content, [], $cell2attributes);
+        // }
 
-        // Show graders whether this submission is editable by students.
-        if ($status->view == assign_submission_status::GRADER_VIEW) {
-            $cell1content = get_string('editingstatus', 'assign');
-            if ($status->canedit) {
-                $cell2content = get_string('submissioneditable', 'assign');
-                $cell2attributes = array('class' => 'submissioneditable');
-            } else {
-                $cell2content = get_string('submissionnoteditable', 'assign');
-                $cell2attributes = array('class' => 'submissionnoteditable');
-            }
-            $this->add_table_row_tuple($t, $cell1content, $cell2content, [], $cell2attributes);
-        }
+        // // Show graders whether this submission is editable by students.
+        // if ($status->view == assign_submission_status::GRADER_VIEW) {
+        //     $cell1content = get_string('editingstatus', 'assign');
+        //     if ($status->canedit) {
+        //         $cell2content = get_string('submissioneditable', 'assign');
+        //         $cell2attributes = array('class' => 'submissioneditable');
+        //     } else {
+        //         $cell2content = get_string('submissionnoteditable', 'assign');
+        //         $cell2attributes = array('class' => 'submissionnoteditable');
+        //     }
+        //     $this->add_table_row_tuple($t, $cell1content, $cell2content, [], $cell2attributes);
+        // }
 
-        // Grading criteria preview.
-        if (!empty($status->gradingcontrollerpreview)) {
-            $cell1content = get_string('gradingmethodpreview', 'assign');
-            $cell2content = $status->gradingcontrollerpreview;
-            $this->add_table_row_tuple($t, $cell1content, $cell2content, [], $cell2attributes);
-        }
+        // // Grading criteria preview.
+        // if (!empty($status->gradingcontrollerpreview)) {
+        //     $cell1content = get_string('gradingmethodpreview', 'assign');
+        //     $cell2content = $status->gradingcontrollerpreview;
+        //     $this->add_table_row_tuple($t, $cell1content, $cell2content, [], $cell2attributes);
+        // }
 
         // Last modified.
-        if ($submission) {
-            $cell1content = get_string('timemodified', 'assign');
 
-            if ($submission->status != ASSIGN_SUBMISSION_STATUS_NEW) {
-                $cell2content = userdate($submission->timemodified);
-            } else {
-                $cell2content = "-";
-            }
-
-            $this->add_table_row_tuple($t, $cell1content, $cell2content);
-
-            if (!$status->teamsubmission || $status->submissiongroup != false || !$status->preventsubmissionnotingroup) {
-                foreach ($status->submissionplugins as $plugin) {
-                    $pluginshowsummary = !$plugin->is_empty($submission) || !$plugin->allow_submissions();
-                    if ($plugin->is_enabled() &&
-                        $plugin->is_visible() &&
-                        $plugin->has_user_summary() &&
-                        $pluginshowsummary
-                    ) {
-
-                        $cell1content = $plugin->get_name();
-                        $displaymode = assign_submission_plugin_submission::SUMMARY;
-                        $pluginsubmission = new assign_submission_plugin_submission($plugin,
-                            $submission,
-                            $displaymode,
-                            $status->coursemoduleid,
-                            $status->returnaction,
-                            $status->returnparams);
-                        $cell2content = $this->render($pluginsubmission);
-                        $this->add_table_row_tuple($t, $cell1content, $cell2content);
-                    }
-                }
-            }
-        }
-
-        $o .= $warningmsg;
-        $o .= html_writer::table($t);
-        $o .= $this->output->box_end();
+        //$o .= $warningmsg;
+        //$o .= html_writer::table($t);
+        //$o .= $this->output->box_end();
 
         // Links.
+
+        //this edit window isn't resilient to daylight savings for instance, but would only be off by an hour
+        $edit_window = 3*24*60*60;
+        $three_days_later = $submission->timemodified + $edit_window;
+        $editable = true;
+        if ($three_days_later < $time){
+            $editable = false;
+            $o .= "Thanks for completing";
+            $o .= "<br><br>";
+        }
         if ($status->view == assign_submission_status::STUDENT_VIEW) {
-            if ($status->canedit) {
+            if ($status->canedit && $editable) {
                 if (!$submission || $submission->status == ASSIGN_SUBMISSION_STATUS_NEW) {
                     $o .= $this->output->box_start('generalbox submissionaction');
                     $urlparams = array('id' => $status->coursemoduleid, 'action' => 'editsubmission');
@@ -968,6 +948,45 @@ class mod_assign_renderer extends plugin_renderer_base {
                 $o .= get_string('submitassignment_help', 'assign');
                 $o .= $this->output->box_end();
                 $o .= $this->output->box_end();
+            }
+        }
+        if ($submission) {
+            // $cell1content = get_string('timemodified', 'assign');
+
+            // if ($submission->status != ASSIGN_SUBMISSION_STATUS_NEW) {
+            //     $cell2content = userdate($submission->timemodified);
+            // } else {
+            //     $cell2content = "-";
+            // }
+
+            // $this->add_table_row_tuple($t, $cell1content, $cell2content);
+
+            if (!$status->teamsubmission || $status->submissiongroup != false || !$status->preventsubmissionnotingroup) {
+                foreach ($status->submissionplugins as $plugin) {
+                    $pluginshowsummary = !$plugin->is_empty($submission) || !$plugin->allow_submissions();
+                    if ($plugin->is_enabled() &&
+                        $plugin->is_visible() &&
+                        $plugin->has_user_summary() &&
+                        $pluginshowsummary
+                    ) {
+                        if(strcmp($plugin->get_name(), 'Submission comments') == 0){
+                            $cell1content = "Give us some feedback about this exercise:";
+                        }
+                        $displaymode = assign_submission_plugin_submission::SUMMARY;
+                        $pluginsubmission = new assign_submission_plugin_submission($plugin,
+                            $submission,
+                            $displaymode,
+                            $status->coursemoduleid,
+                            $status->returnaction,
+                            $status->returnparams);
+                        if(strcmp($plugin->get_name(), 'Submission comments') == 0){
+                            $o .= $this->output->heading($cell1content, 3);
+                            $cell2content = $this->render($pluginsubmission);
+                            $o .= $this->output->heading($cell2content, 3);
+                            //$this->add_table_row_tuple($t, $cell1content, $cell2content);
+                        }
+                    }
+                }
             }
         }
 

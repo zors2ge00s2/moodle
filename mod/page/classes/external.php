@@ -103,7 +103,120 @@ class mod_page_external extends external_api {
             )
         );
     }
+ /**
+     * Sets the parameters for the view_video service call
+     */
+    public static function view_video_parameters() {
+        return new external_function_parameters(
+            array(
+                'pageid' => new external_value(PARAM_INT, 'The page id the video was watched on'),
+                'videoid' => new external_value(PARAM_RAW, 'The id for the video'),
+                'thisstart' => new external_value(PARAM_INT, 'The start to this watched segment'),
+                'thisend' => new external_value(PARAM_INT, 'The end to this watched segment')
+            )
+        );
+    }
+    /**
+     * Simulate the page/view.php web interface page: trigger events, completion, etc...
+     *
+     * @param int $pageid the page instance id
+     * @return array of warnings and status result
+     * @since Moodle 3.0
+     * @throws moodle_exception
+     */
+    public static function view_video($pageid, $videoid, $thisstart, $thisend) {
+        global $DB, $CFG;
+        require_once($CFG->dirroot . "/mod/page/lib.php");
+        $context = context_module::instance($pageid);
+        self::validate_context($context);
+        $other = array(
+            'videoid'=> $videoid,
+            'thisstart'=> $thisstart,
+            'thisend'=> $thisend
+        );
+        // Request and permission validation.
+        $params2 = array( 
+            'objectid' => $pageid,
+            'context' => $context,
+            'other' =>$other
+        );
 
+
+        $event2 = \mod_page\event\course_video_viewed::create($params2);
+        $event2->trigger();
+        $log_extra = $event2->get_logextra();
+
+
+        // Call the page/lib API.
+        $result = array();
+        $result['status'] = $event2->is_triggered();
+        $result['has_logextra'] = is_null($log_extra);
+        return $result;
+    }
+
+    public static function view_video_returns() {
+        return new external_single_structure(
+            array(
+                'status' => new external_value(PARAM_BOOL, 'status: true if success'),
+                'has_logextra' => new external_value(PARAM_BOOL, 'Whether a logextra is attached')
+            )
+        );
+    }
+
+    /**
+     * Sets the parameters for the submit_video_response service call
+     */
+    public static function submit_video_response_parameters() {
+        return new external_function_parameters(
+            array(
+                'pageid' => new external_value(PARAM_INT, 'The page id the video was watched on'),
+                'videoid' => new external_value(PARAM_RAW, 'The id for the video'),
+                'videoresponse' => new external_value(PARAM_RAW, 'The user\'s response to the video')
+            )
+        );
+    }
+    /**
+     * Simulate the page/view.php web interface page: trigger events, completion, etc...
+     *
+     * @param int $pageid the page instance id
+     * @return array of warnings and status result
+     * @since Moodle 3.0
+     * @throws moodle_exception
+     */
+    public static function submit_video_response($pageid, $videoid, $videoresponse) {
+        global $DB, $CFG;
+        require_once($CFG->dirroot . "/mod/page/lib.php");
+        $context = context_module::instance($pageid);
+        self::validate_context($context);
+        $other = array(
+            'videoid'=> $videoid,
+            'videoresponse'=> $videoresponse,
+        );
+        // Request and permission validation.
+        $params2 = array( 
+            'objectid' => $pageid,
+            'context' => $context,
+            'other' =>$other
+        );
+
+
+        $event2 = \mod_page\event\course_video_response_submitted::create($params2);
+        $event2->trigger();
+
+
+        // Call the page/lib API.
+        $result = array();
+        $result['status'] = $event2->is_triggered();
+        return $result;
+    }
+
+    public static function submit_video_response_returns() {
+        return new external_single_structure(
+            array(
+                'status' => new external_value(PARAM_BOOL, 'status: true if success'),
+            )
+        );
+    }
     /**
      * Describes the parameters for get_pages_by_courses.
      *
